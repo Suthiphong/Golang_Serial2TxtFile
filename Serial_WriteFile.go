@@ -8,7 +8,7 @@ import "os"
 
 func main() {
         config := &serial.Config{
-                Name: "/dev/ttyUSB0",
+                Name: "COM32",
                 Baud: 9600,
                 ReadTimeout: 5,
                 Size: 8,
