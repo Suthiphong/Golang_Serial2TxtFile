@@ -2,19 +2,52 @@ package main
 
 import (
 	"fmt"
+	"github.com/tarm/serial"
+	"log"
+	"os"
 )
 
 func main() {
-	var firstname string
-	var surname string
-
+	var sp string
+	var baudrate int
 	fmt.Print("COM PORT  : ")
-	fmt.Scanln(&firstname)
+	fmt.Scanln(&sp)
+	fmt.Print("Baudrate : ")
+	fmt.Scanln(&baudrate)
+	fmt.Print(sp,  " ")
+	fmt.Print(baudrate)
+    config := &serial.Config{
+                Name: sp,
+                Baud: baudrate,
+                ReadTimeout: 5,
+                Size: 8,
+		}
+    stream, err := serial.OpenPort(config)
+        if err != nil {
+                log.Fatal(err)
+        }
 
-	fmt.Print("BaudRate : ")
-	fmt.Scanln(&surname)
+		buf := make([]byte, 1024)
+		file, err := os.OpenFile("./data.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			panic(err)
+		}
+		defer file.Close()
+		//if _, err := file.WriteString()
+        for {
+                n, err := stream.Read(buf)
+                if err != nil {
+                        log.Fatal(err)
+                }
+				s := string(buf[:n])
+				
+				fmt.Println(s)
+				if _, err := file.WriteString(s); err != nil {
+					log.Println(err)
+				}
+				
+        }
+        fmt.Scanln()
 
-	fmt.Print(firstname)
-	fmt.Print(surname)
 }
 
