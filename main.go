@@ -10,6 +10,9 @@ import (
 func main() {
 	var sp string
 	var baudrate int
+	fmt.Println("########################################")
+	fmt.Println("#      Serial to text                  #")
+	fmt.Println("########################################")
 	fmt.Print("COM PORT  : ")
 	fmt.Scanln(&sp)
 	fmt.Print("Baudrate : ")
@@ -33,6 +36,7 @@ func main() {
 			panic(err)
 		}
 		defer file.Close()
+		fmt.Println("wait data")
 		//if _, err := file.WriteString()
         for {
                 n, err := stream.Read(buf)
